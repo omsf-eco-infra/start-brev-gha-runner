@@ -1,0 +1,35 @@
+name: start-brev-gha-runner
+description: Create an ephemeral self-hosted GitHub Actions runner on NVIDIA Brev.
+runs:
+  using: docker
+  image: Dockerfile
+inputs:
+  brev_instance_type:
+    description: "Brev instance type or comma-separated fallback chain. Find values with `brev search`."
+    required: true
+  brev_org:
+    description: "Optional Brev organization name. Uses the token's active organization by default."
+    required: false
+  brev_timeout:
+    description: "Seconds to wait for Brev to provision each instance."
+    required: true
+    default: "600"
+  extra_gh_labels:
+    description: "Extra comma-separated GitHub runner labels."
+    required: false
+  instance_count:
+    description: "Number of runners to create."
+    required: true
+    default: "1"
+  repo:
+    description: "Repository to register the runners with. Defaults to the current repository."
+    required: false
+  gh_timeout:
+    description: "Seconds to wait for each runner to appear in GitHub."
+    required: true
+    default: "1200"
+outputs:
+  mapping:
+    description: "JSON object mapping Brev instance names to GitHub runner labels."
+  instances:
+    description: "JSON list of runner labels for use with `runs-on`."
