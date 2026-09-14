@@ -1,6 +1,6 @@
-FROM python:3.12-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-ENV PATH="/root/.local/bin:${PATH}" \
+ENV PATH="/app/.venv/bin:/root/.local/bin:${PATH}" \
     PYTHONUNBUFFERED=1
 
 RUN apt-get update \
@@ -10,6 +10,6 @@ RUN apt-get update \
 
 WORKDIR /app
 COPY . .
-RUN pip install --no-cache-dir .
+RUN uv sync --locked --no-dev --no-cache
 
 CMD ["python", "-m", "start_brev_gha_runner"]
