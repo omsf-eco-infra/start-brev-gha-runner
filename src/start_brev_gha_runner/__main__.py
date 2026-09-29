@@ -10,11 +10,16 @@ from .start import StartBrev
 
 def main():
     env = dict(os.environ)
-    check_required(env, ["GH_PAT", "BREV_TOKEN"])
+    if "INPUT_BREV_ORG" in env:
+        raise ValueError(
+            "brev_org is no longer supported. Create a BREV_API_KEY in the "
+            "organization that owns the runners and remove brev_org."
+        )
+    check_required(env, ["GH_PAT", "BREV_API_KEY"])
 
-    subprocess.run(["brev", "login", "--token", env["BREV_TOKEN"]], check=True)
-    if env.get("INPUT_BREV_ORG"):
-        subprocess.run(["brev", "set", env["INPUT_BREV_ORG"]], check=True)
+    subprocess.run(
+        ["brev", "login", "--api-key", env["BREV_API_KEY"]], check=True
+    )
 
     params = (
         EnvVarBuilder(env)

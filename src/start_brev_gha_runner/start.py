@@ -1,5 +1,6 @@
 import importlib.resources
 import json
+import shlex
 import subprocess
 import tempfile
 from dataclasses import dataclass, field
@@ -22,17 +23,15 @@ class StartBrev(CreateCloudInstance):
     gh_runner_tokens: list[str] = field(default_factory=list)
 
     def _build_startup_script(self, token: str, label: str) -> str:
-        template = importlib.resources.files("gha_runner").joinpath(
-            "templates/user-script.sh.templ"
+        template = importlib.resources.files("start_brev_gha_runner").joinpath(
+            "startup.sh.templ"
         )
         labels = ",".join(filter(None, (self.labels, label)))
         return Template(template.read_text()).substitute(
-            homedir="/home/ubuntu/workspace",
-            script="",
-            repo=self.repo,
-            token=token,
-            runner_release=self.runner_release,
-            labels=labels,
+            repo_url=shlex.quote(f"https://github.com/{self.repo}"),
+            token=shlex.quote(token),
+            runner_release=shlex.quote(self.runner_release),
+            labels=shlex.quote(labels),
         )
 
     def create_instances(self) -> dict[str, str]:

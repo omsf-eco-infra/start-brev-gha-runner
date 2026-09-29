@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+runner_release=$runner_release
+repo_url=$repo_url
+token=$token
+labels=$labels
+
+runner_dir="$${HOME}/gha-runner"
+mkdir -p "$${runner_dir}"
+cd "$${runner_dir}"
+
+export RUNNER_ALLOW_RUNASROOT=1
+curl --fail --location --retry 5 --retry-all-errors --retry-delay 2 \
+    --output runner.tar.gz -- "$${runner_release}"
+tar -xzf runner.tar.gz
+./config.sh --url "$${repo_url}" --token "$${token}" \
+    --labels "$${labels}" --ephemeral --unattended
+exec ./run.sh

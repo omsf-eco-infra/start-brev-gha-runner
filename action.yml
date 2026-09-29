@@ -7,9 +7,6 @@ inputs:
   brev_instance_type:
     description: "Brev instance type or comma-separated fallback chain. Find values with `brev search`."
     required: true
-  brev_org:
-    description: "Optional Brev organization name. Uses the token's active organization by default."
-    required: false
   brev_timeout:
     description: "Seconds to wait for Brev to provision each instance."
     required: true
