@@ -219,23 +219,6 @@ class MainTests(unittest.TestCase):
         deploy.return_value.start_runner_instances.assert_called_once_with()
 
     @patch("start_brev_gha_runner.__main__.subprocess.run")
-    def test_rejects_old_organization_input(self, run):
-        with patch.dict(
-            "os.environ",
-            {
-                "GH_PAT": "gh-token",
-                "BREV_API_KEY": "brev-api-key",
-                "INPUT_BREV_ORG": "old-org",
-            },
-            clear=True,
-        ):
-            with self.assertRaisesRegex(
-                ValueError, "brev_org is no longer supported"
-            ):
-                main()
-        run.assert_not_called()
-
-    @patch("start_brev_gha_runner.__main__.subprocess.run")
     def test_requires_api_key(self, run):
         with patch.dict(
             "os.environ",

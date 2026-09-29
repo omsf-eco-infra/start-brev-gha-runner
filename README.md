@@ -29,9 +29,7 @@ deployment lifecycle.
 | `gh_timeout` | no | `1200` | GitHub registration timeout in seconds. |
 
 The action requires `BREV_API_KEY` and `GH_PAT` in its environment. The API key
-selects its organization automatically. Remove any old `brev_org` input; the
-action rejects it because `brev set` cannot switch organizations with API-key
-authentication.
+selects its organization automatically.
 
 ## Outputs
 

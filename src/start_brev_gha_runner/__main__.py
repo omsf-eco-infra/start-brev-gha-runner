@@ -10,11 +10,6 @@ from .start import StartBrev
 
 def main():
     env = dict(os.environ)
-    if "INPUT_BREV_ORG" in env:
-        raise ValueError(
-            "brev_org is no longer supported. Create a BREV_API_KEY in the "
-            "organization that owns the runners and remove brev_org."
-        )
     check_required(env, ["GH_PAT", "BREV_API_KEY"])
 
     subprocess.run(
