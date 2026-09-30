@@ -10,11 +10,11 @@ from .start import StartBrev
 
 def main():
     env = dict(os.environ)
-    check_required(env, ["GH_PAT", "BREV_TOKEN"])
+    check_required(env, ["GH_PAT", "BREV_API_KEY"])
 
-    subprocess.run(["brev", "login", "--token", env["BREV_TOKEN"]], check=True)
-    if env.get("INPUT_BREV_ORG"):
-        subprocess.run(["brev", "set", env["INPUT_BREV_ORG"]], check=True)
+    subprocess.run(
+        ["brev", "login", "--api-key", env["BREV_API_KEY"]], check=True
+    )
 
     params = (
         EnvVarBuilder(env)
