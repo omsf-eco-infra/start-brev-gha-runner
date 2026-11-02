@@ -1,10 +1,10 @@
 import json
 import os
-from pathlib import Path
 import subprocess
 import tempfile
 import textwrap
 import unittest
+from pathlib import Path
 from unittest.mock import call, mock_open, patch
 
 from start_brev_gha_runner.__main__ import main
@@ -169,6 +169,7 @@ class StartBrevTests(unittest.TestCase):
                 env=env,
                 cwd=root,
                 capture_output=True,
+                check=False,
             )
             self.assertEqual(result.returncode, 22)
             self.assertFalse((root / "gha-runner" / "config.sh").exists())
@@ -220,16 +221,18 @@ class MainTests(unittest.TestCase):
 
     @patch("start_brev_gha_runner.__main__.subprocess.run")
     def test_requires_api_key(self, run):
-        with patch.dict(
-            "os.environ",
-            {
-                "GH_PAT": "gh-token",
-                "BREV_TOKEN": "old-token",
-            },
-            clear=True,
+        with (
+            patch.dict(
+                "os.environ",
+                {
+                    "GH_PAT": "gh-token",
+                    "BREV_TOKEN": "old-token",
+                },
+                clear=True,
+            ),
+            self.assertRaisesRegex(Exception, "BREV_API_KEY"),
         ):
-            with self.assertRaisesRegex(Exception, "BREV_API_KEY"):
-                main()
+            main()
         run.assert_not_called()
 
 
